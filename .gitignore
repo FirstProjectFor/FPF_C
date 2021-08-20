@@ -4,3 +4,6 @@
 # cmake
 cmake-build-debug/
 CMakeLists.txt
+
+# c file
+*.exe
