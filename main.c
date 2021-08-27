@@ -146,7 +146,7 @@ void memory() {
 
     //address + 8
     printf("double point:%p\n", PI + 1);
-    printf("double value:%d\n", *(PI + 1));
+    printf("double value:%f\n", *(PI + 1));
     //free
     free(PI);
     PI = NULL;
@@ -309,11 +309,11 @@ int main(int argc, char *args[]) {
     printf("Hello World!\n");
     printf("%d\n", argc);
     printf("%s\n", args[0]);
-    printf("%llu\n", sizeof(int));
-    printf("%llu\n", sizeof(float));
+    printf("%d\n", (int) sizeof(int));
+    printf("%d\n", (int) sizeof(float));
     printf("%f\n", FLT_MIN);
     printf("%f\n", FLT_MAX);
-    printf("%llu\n", sizeof(double));
+    printf("%d\n", (int) sizeof(double));
     printf("%f\n", DBL_MIN);
     printf("%f\n", DBL_MAX);
 
@@ -327,7 +327,7 @@ int main(int argc, char *args[]) {
 
     char name[] = "ZS";
     printf("string: %s\n", name);
-    printf("string: %llu\n", strlen(name));
+    printf("string length: %d\n", (int) strlen(name));
 
     //run struct
     testStruct();
@@ -375,7 +375,7 @@ int main(int argc, char *args[]) {
 
     CodecItem1 c1;
     int start = 0;
-    int rowCount = readInt(bbb, start);
+    uint32_t rowCount = readInt(bbb, start);
     printf("read data row count: %d\n", rowCount);
     start = start + 4;
     CodecItem1 result1[rowCount];
