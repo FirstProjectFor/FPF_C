@@ -133,38 +133,6 @@ int testResort(int times) {
     return errorCount;
 }
 
-void memory() {
-    //malloc double
-    double *PI = malloc(sizeof(double));
-    if (PI == NULL) {
-        printf("malloc failed\n");
-        return;
-    }
-    *PI = 3.1415926;
-    printf("double address:%p\n", PI);
-    printf("double   value:%f\n", *PI);
-
-    //address + 8
-    printf("double point:%p\n", PI + 1);
-    printf("double value:%f\n", *(PI + 1));
-    //free
-    free(PI);
-    PI = NULL;
-    printf("after free double address:%p\n", PI);
-
-    //int
-    int *age = malloc(sizeof(int));
-    printf("int point:%p\n", age);
-    printf("int value:%d\n", *age);
-
-    //address+4
-    printf("int point:%p\n", age + 1);
-    printf("int value:%d\n", *(age + 1));
-
-    free(age);
-    age = NULL;
-}
-
 void testEnum() {
     season s1 = spring;
     season s2 = autumn;
@@ -186,39 +154,6 @@ void testEnum() {
         }
     }
 }
-
-
-void memoryVariable() {
-    char hello[] = "hello";
-    int i;
-    int ival[] = {1, 2, 3, 4};
-    int arr_val[][2] = {{1, 2},
-                        {3, 4}};
-    const char *pconst = "hello";
-    char *p;
-    int *pi;
-    int *pa;
-    int **par;
-
-    p = hello;
-    p++;              //addr增加1
-    pi = ival;
-    pi += 1;          //addr增加4
-    pa = arr_val[0];
-    pa += 1;          //addr增加4
-    par = (int **) arr_val;
-    par++;           //addr增加8
-    for (i = 0; i < sizeof(hello); i++) {
-        printf("%d ", hello[i]);
-    }
-    printf("\n");
-    printf("pconst:%s\n", pconst);
-    printf("addr:%p, %p\n", hello, p);
-    printf("addr:%p, %p\n", ival, pi);
-    printf("addr:%p, %p\n", arr_val, pa);
-    printf("addr:%p, %p\n", arr_val, par);
-}
-
 
 typedef struct CodecItem {
     char *key;
@@ -342,8 +277,8 @@ int main(int argc, char *args[]) {
     printf("%p\n", uint23Point);
 
 
-    //memory
-    memory();
+    //memory_malloc
+    memory_malloc();
     memoryVariable();
 
     //enum
