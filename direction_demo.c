@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 
 #ifdef FPF_C_STRUCT_MATH_H
 
