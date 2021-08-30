@@ -109,9 +109,9 @@ int main() {
     CodecItem1 result1[rowCount];
     unmarshal(bbb, start, rowCount, result1);
     printf("unmarshal: %p\n", result1);
-    printf("unmarshal: %s\n", result1[0].key);
-    printf("unmarshal: %s\n", result1[0].value);
-    printf("unmarshal: %s\n", result1[1].key);
-    printf("unmarshal: %s\n", result1[1].value);
+    for (int i = 0; i < rowCount; ++i) {
+        printf("unmarshal   key: %s\n", result1[i].key);
+        printf("unmarshal value: %s\n", result1[i].value);
+    }
     return 0;
 }
