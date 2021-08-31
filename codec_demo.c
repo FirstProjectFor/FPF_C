@@ -32,7 +32,6 @@ void unmarshal(char data[], int start, uint32_t rowCount, CodecItem1 result[]) {
         CodecItem1 row;
         char *key = malloc(keyLength + 1);
         key[keyLength] = '\0';
-        memset(key, 0, keyLength);
         for (int keyIndex = 0; keyIndex < keyLength; ++keyIndex) {
             key[keyIndex] = data[start];
             start++;
@@ -41,8 +40,7 @@ void unmarshal(char data[], int start, uint32_t rowCount, CodecItem1 result[]) {
         start = start + 4;
         uint32_t valueLength = readInt(data, start);
         start = start + 4;
-        char *value = malloc(valueLength);
-        memset(value, 0, valueLength);
+        char *value = malloc(valueLength + 1);
         value[valueLength] = '\0';
         for (int valueIndex = 0; valueIndex < valueLength; ++valueIndex) {
             value[valueIndex] = data[start];
@@ -99,7 +97,7 @@ int main() {
                   0, 0, 0, 9, 0, 0, 0, 232, 186, 171, 228, 187, 189, 232, 175, 129, 1, 0, 0, 0, 5, 0, 0, 0, 114, 97,
                   116, 105, 111, 1, 0, 0, 0, 3, 0, 0, 0, 49, 48, 48, 1, 0, 0, 0, 2, 0, 0, 0, 122, 108, 1, 0, 0, 0, 27,
                   0, 0, 0, 229, 140, 151, 228, 186, 172, 232, 191, 144, 230, 178, 179, 229, 178, 184, 228, 184, 138,
-                  231, 154, 1, 32, 233, 153, 162, 229, 173, 144};
+                  231, 154, 132, 233, 153, 162, 229, 173, 144};
 
     CodecItem1 c1;
     int start = 0;
