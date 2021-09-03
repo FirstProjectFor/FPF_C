@@ -9,12 +9,16 @@ static const uint32_t key_count_bytes = 4;
 
 static const uint32_t key_length_index = 0;
 static const uint32_t key_length_bytes = 4;
+
 static const uint32_t value_length_bytes = 4;
 static const uint32_t value_length_index = key_length_bytes;
+
 static const uint32_t key_fixed_space = 100;
 static const uint32_t key_fixed_space_index = value_length_index + value_length_bytes;
+
 static const uint32_t value_fixed_space = 500;
 static const uint32_t value_fixed_space_index = key_fixed_space_index + key_fixed_space;
+
 static const uint32_t single_param_size = key_length_bytes + value_length_bytes + key_fixed_space + value_fixed_space;
 
 uint32_t get_length(uint32_t value) {
@@ -156,8 +160,10 @@ KV *read(char *start_point) {
     KV *result = malloc(sizeof(KV) * count);
     start_point += single_param_size;
     for (int i = 0; i < count; ++i) {
-        uint32_t key_length = stringToIntFourByte(readData(start_point + key_length_index, key_length_bytes));
-        uint32_t value_length = stringToIntFourByte(readData(start_point + value_length_index, value_length_bytes));
+        char *keyStr = readData(start_point + key_length_index, key_length_bytes);
+        uint32_t key_length = stringToIntFourByte(keyStr);
+        char *valueStr = readData(start_point + value_length_index, value_length_bytes);
+        uint32_t value_length = stringToIntFourByte(valueStr);
 
         char *key = readData(start_point + key_fixed_space_index, key_length);
         char *value = readData(start_point + value_fixed_space_index, value_length);
@@ -198,4 +204,12 @@ int main() {
     for (int i = 0; i < paramCount; ++i) {
         printf("%s:%s\n", kv[i].key, kv[i].value);
     }
+
+    for (int i = 0; i < paramCount; ++i) {
+        free(data[i].key);
+        free(data[i].value);
+        free(kv[i].key);
+        free(kv[i].value);
+    }
+    free(kv);
 }
