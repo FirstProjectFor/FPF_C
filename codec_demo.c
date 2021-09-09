@@ -3,10 +3,10 @@
 #include <stdint.h>
 #include <string.h>
 
-typedef struct CodecItem {
+typedef struct {
     char *key;
     char *value;
-} CodecItem1;
+} CodecItem;
 
 uint32_t readInt(const char *data, int start) {
     uint32_t first = (uint32_t) data[start];
@@ -23,7 +23,7 @@ void writeInt(char *data, int start, uint32_t value) {
     data[start + 3] = (char) (value >> 24);
 }
 
-char *getValue(CodecItem1 *data, uint32_t rowCount, char *k) {
+char *getValue(CodecItem *data, uint32_t rowCount, char *k) {
     char *result;
     for (int i = 0; i < rowCount; ++i) {
         uint64_t key_length = strlen(data[i].key);
@@ -39,17 +39,17 @@ char *getValue(CodecItem1 *data, uint32_t rowCount, char *k) {
 }
 
 
-CodecItem1 *unmarshal(char *data, uint32_t *length) {
+CodecItem *unmarshal(char *data, uint32_t *length) {
     int start = 0;
     uint32_t rowCount = readInt(data, start);
     printf("read data row count: %d\n", rowCount);
     start = start + 4;
-    CodecItem1 *result = malloc(sizeof(CodecItem1) * (rowCount + 1));
+    CodecItem *result = malloc(sizeof(CodecItem) * (rowCount + 1));
     for (int rowIndex = 0; rowIndex < rowCount; ++rowIndex) {
         start = start + 4;
         uint32_t keyLength = readInt(data, start);
         start = start + 4;
-        CodecItem1 row;
+        CodecItem row;
         char *key = malloc(keyLength + 1);
         key[keyLength] = '\0';
         for (int keyIndex = 0; keyIndex < keyLength; ++keyIndex) {
@@ -73,7 +73,7 @@ CodecItem1 *unmarshal(char *data, uint32_t *length) {
     return result;
 }
 
-void marshal(char *result, uint32_t rowCount, CodecItem1 data[]) {
+void marshal(char *result, uint32_t rowCount, CodecItem data[]) {
     int start = 0;
     writeInt(result, start, rowCount);
     start = start + 4;
@@ -123,7 +123,7 @@ int main() {
 
 
     uint32_t rowCount = 0;
-    CodecItem1 *result = unmarshal(bbb, &rowCount);
+    CodecItem *result = unmarshal(bbb, &rowCount);
 
     for (int i = 0; i < rowCount; ++i) {
         printf("%s\n", result[i].key);
