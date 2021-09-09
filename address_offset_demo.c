@@ -26,6 +26,7 @@ int main(int argc, char *args[]) {
 
     uint32_t tree_id = 1;
     uint32_t *tree_offset = malloc(sizeof(uint32_t));
+    *tree_offset = 0;
     HAL_GetTreeOffset(&tree_id, tree_offset);
     printf("%d, %p\n", tree_id, tree_offset);
     printf("%d, %u\n", tree_id, *tree_offset);

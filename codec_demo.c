@@ -23,8 +23,28 @@ void writeInt(char *data, int start, uint32_t value) {
     data[start + 3] = (char) (value >> 24);
 }
 
+char *getValue(CodecItem1 *data, uint32_t rowCount, char *k) {
+    char *result;
+    for (int i = 0; i < rowCount; ++i) {
+        uint64_t key_length = strlen(data[i].key);
+        if (strcmp(data[i].key, k) == 0) {
+            result = malloc(sizeof(char) * strlen(data[i].value));
+            strcpy(result, data[i].value);
+            return result;
+        }
+    }
+    result = malloc(sizeof(char));
+    result[0] = '\0';
+    return result;
+}
 
-void unmarshal(char data[], int start, uint32_t rowCount, CodecItem1 result[]) {
+
+CodecItem1 *unmarshal(char *data, uint32_t *length) {
+    int start = 0;
+    uint32_t rowCount = readInt(data, start);
+    printf("read data row count: %d\n", rowCount);
+    start = start + 4;
+    CodecItem1 *result = malloc(sizeof(CodecItem1) * (rowCount + 1));
     for (int rowIndex = 0; rowIndex < rowCount; ++rowIndex) {
         start = start + 4;
         uint32_t keyLength = readInt(data, start);
@@ -49,6 +69,8 @@ void unmarshal(char data[], int start, uint32_t rowCount, CodecItem1 result[]) {
         row.value = value;
         result[rowIndex] = row;
     }
+    *length = rowCount;
+    return result;
 }
 
 void marshal(char *result, uint32_t rowCount, CodecItem1 data[]) {
@@ -99,17 +121,21 @@ int main() {
                   0, 0, 0, 229, 140, 151, 228, 186, 172, 232, 191, 144, 230, 178, 179, 229, 178, 184, 228, 184, 138,
                   231, 154, 132, 233, 153, 162, 229, 173, 144};
 
-    CodecItem1 c1;
-    int start = 0;
-    uint32_t rowCount = readInt(bbb, start);
-    printf("read data row count: %d\n", rowCount);
-    start = start + 4;
-    CodecItem1 result1[rowCount];
-    unmarshal(bbb, start, rowCount, result1);
-    printf("unmarshal: %p\n", result1);
+
+    uint32_t rowCount = 0;
+    CodecItem1 *result = unmarshal(bbb, &rowCount);
+
     for (int i = 0; i < rowCount; ++i) {
-        printf("unmarshal   key: %s\n", result1[i].key);
-        printf("unmarshal value: %s\n", result1[i].value);
+        printf("%s\n", result[i].key);
+        printf("%s\n", result[i].value);
     }
+
+    printf("\n\n");
+    char *value = getValue(result, rowCount, "qyrzjh");
+    printf("%s\n", value);
+    value = getValue(result, rowCount, "qlrzjh");
+    printf("%s\n", value);
+    value = getValue(result, rowCount, "qlrzjlx");
+    printf("%s\n", value);
     return 0;
 }
