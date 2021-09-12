@@ -8,3 +8,6 @@ CMakeLists.txt
 # c file
 *.exe
 *.out
+
+# vscode
+.vscode/
