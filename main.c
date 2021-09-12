@@ -8,4 +8,5 @@ int main() {
     printf("number:%d\n", number);
     printf("numberPointer:%p\n", numberPointer);
     printf("numberPointerPointer:%p\n", numberPointerPointer);
+    return 0;
 }
