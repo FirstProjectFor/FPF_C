@@ -4,7 +4,9 @@
 #include <string.h>
 
 typedef struct {
+    uint32_t keyLength;
     char *key;
+    uint32_t valueLength;
     char *value;
 } CodecItem;
 
@@ -23,19 +25,25 @@ void writeInt(char *data, int start, uint32_t value) {
     data[start + 3] = (char) (value >> 24);
 }
 
-char *getValue(CodecItem *data, uint32_t rowCount, char *k) {
+void getValue(CodecItem *data, uint32_t rowCount, char *key, uint32_t *keyLength, char **value, uint32_t *valueLength) {
     char *result;
     for (int i = 0; i < rowCount; ++i) {
         uint64_t key_length = strlen(data[i].key);
-        if (strcmp(data[i].key, k) == 0) {
+        if (strcmp(data[i].key, key) == 0) {
+            *keyLength = key_length;
+            *valueLength = strlen(data[i].value);
             result = malloc(sizeof(char) * strlen(data[i].value));
+            for (int j = 0; j < *valueLength; ++j) {
+                result[j] = data[i].value[j];
+            }
+            *value = result;
+            *keyLength = data[i].keyLength;
+            *valueLength = data[i].valueLength;
             strcpy(result, data[i].value);
-            return result;
         }
     }
     result = malloc(sizeof(char));
     result[0] = '\0';
-    return result;
 }
 
 
@@ -56,6 +64,7 @@ CodecItem *unmarshal(char *data, uint32_t *length) {
             key[keyIndex] = data[start];
             start++;
         }
+        row.keyLength = keyLength;
         row.key = key;
         start = start + 4;
         uint32_t valueLength = readInt(data, start);
@@ -66,6 +75,7 @@ CodecItem *unmarshal(char *data, uint32_t *length) {
             value[valueIndex] = data[start];
             start++;
         }
+        row.valueLength = valueLength;
         row.value = value;
         result[rowIndex] = row;
     }
@@ -126,16 +136,33 @@ int main() {
     CodecItem *result = unmarshal(bbb, &rowCount);
 
     for (int i = 0; i < rowCount; ++i) {
+        printf("%d\n", result[i].keyLength);
         printf("%s\n", result[i].key);
+        printf("%d\n", result[i].valueLength);
         printf("%s\n", result[i].value);
     }
 
     printf("\n\n");
-    char *value = getValue(result, rowCount, "qyrzjh");
+    uint32_t keyLength;
+    uint32_t valueLength;
+
+    char *value = "";
+    printf("%p\n", value);
+    printf("%p\n", &value);
+    getValue(result, rowCount, "qlrzjh", &keyLength, &value, &valueLength);
+    printf("%p\n", value);
+    printf("%p\n", &value);
     printf("%s\n", value);
-    value = getValue(result, rowCount, "qlrzjh");
+    getValue(result, rowCount, "qlrzjlx", &keyLength, &value, &valueLength);
     printf("%s\n", value);
-    value = getValue(result, rowCount, "qlrzjlx");
-    printf("%s\n", value);
+
+    int a = 0;
+    int b = 1;
+
+    int *a1 = &a;
+    int **a2 = &a1;
+    *a2 = &b;
+
+    printf("%d\n", a);
     return 0;
 }
