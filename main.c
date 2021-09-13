@@ -1,19 +1,12 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
-int main(int argc, char *args[]) {
+int main() {
+    int number = 10;
+    int *numberPointer = &number;
+    int **numberPointerPointer = &numberPointer;
 
-    char *name = malloc(100 * sizeof(char));
-
-    for (int i = 0; i < strlen(name); ++i) {
-        printf("%c\n", name[i]);
-    }
-
-    getchar();
-
-    for (int i = 0; i < 1000; ++i) {
-        printf("%c\n", name[i]);
-    }
+    printf("number:%d\n", number);
+    printf("numberPointer:%p\n", numberPointer);
+    printf("numberPointerPointer:%p\n", numberPointerPointer);
+    return 0;
 }
-
