@@ -1,12 +1,9 @@
 #include <stdio.h>
 
 int main() {
-    int number = 10;
-    int *numberPointer = &number;
-    int **numberPointerPointer = &numberPointer;
-
-    printf("number:%d\n", number);
-    printf("numberPointer:%p\n", numberPointer);
-    printf("numberPointerPointer:%p\n", numberPointerPointer);
+    int array[100];
+    for (int i = 0; i < 100; ++i) {
+        array[i] = 0;
+    }
     return 0;
 }
